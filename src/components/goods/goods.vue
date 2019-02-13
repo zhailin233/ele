@@ -32,6 +32,6 @@ export default {
             bg-image("guarantee_3")
           &.invoice
             bg-image("invoice_3")
-          &.special
+          &.special  
             bg-image("special_3")
 </style>

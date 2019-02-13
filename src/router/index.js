@@ -11,7 +11,7 @@ Vue.use(vueResource)
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/goods',
       name: 'Goods',
       component: goods
     },

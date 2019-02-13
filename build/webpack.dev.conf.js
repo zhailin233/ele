@@ -12,6 +12,10 @@ const portfinder = require('portfinder')
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
+var appData = require("../data.json");
+var seller = appData.seller;
+var goods = appData.goods;
+var ratings = appData.ratings;
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -42,6 +46,26 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
+    },
+    before(app) {
+      app.get("/api/seller",function(req,res){
+        res.json({
+          errno:0,
+          data:seller
+        });
+      });
+      app.get("/api/goods",function(req,res){
+        res.json({
+          errno:0,
+          data:goods
+        });
+      });
+      app.get("/api/ratings",function(req,res){
+        res.json({
+          errno:0,
+          data:ratings
+        });
+      });
     }
   },
   plugins: [
