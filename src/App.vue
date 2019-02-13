@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v_header></v_header>
+    <v_header :seller='seller'></v_header>
     <div class="tab border-1px">
       <router-link v-for="item in tab" :key="item.id" :to='item.path' class="tab-item">{{item.name}}</router-link>
     </div>
@@ -11,6 +11,7 @@
 <script>
 import headerVue from './components/header/header.vue';
 import urlParse from './common/js/util'
+const ERR_OK = 0;
 export default {
   name: 'App',
   components: {
@@ -31,13 +32,12 @@ export default {
   created() {
     this.$router.push('/goods')
     this.$http.get("/api/seller").then((response)=>{
-            console.log(response.data.data)
-              response = response.data;
-              if(response.errno===ERR_OK){
-                  this.seller = response.data;
-
-              }
-          })
+      response = response.data;
+      if (response.errno === ERR_OK) {
+        this.seller = response.data
+        console.log(this.seller)
+      }
+    })
   }
 }
 </script>
