@@ -1,12 +1,70 @@
 <template>
   <transition name='slide'>
     <div class="food" v-show="showFlag" ref="food">
-      food
+      <div class="food-content">
+        <div class="image-header">
+          <img :src="food.image" alt="">
+          <div class="back" @click="hide">
+            <i class="icon-arrow_lift"></i>
+          </div>
+        </div>
+        <div class="content">
+          <h1 class="title">{{food.name}}</h1>
+          <div class="detail">
+            <span class="sell-count">月售{{food.sellCount}}份</span>
+            <span class="rating">好评率{{food.rating}}%</span>
+          </div>
+          <div class="price">
+            <span class="now">￥{{food.price}}</span>
+            <span class="old" v-show="food.oldPrice">原价{{food.oldPrice}}</span>
+          </div>
+          <div class="cartcontrol-wrapper">
+            <cartcontrol :food='food'></cartcontrol>
+          </div>
+          <transition name="fade">
+            <div @click.stop.prevent="addFirst($event)" class="buy" v-show="!food.count || food.count == 0">加入购物车</div>
+          </transition>
+        </div>
+        <split v-show="food.info"></split>
+        <div class="info" v-show="food.info">
+          <h1 class="title">商品介绍</h1>
+          <p class="text">{{food.info}}</p>
+        </div>
+        <split></split>
+        <div class="rating">
+          <h1 class="title">商品评价</h1>
+          <ratingselect></ratingselect>
+          <div class="rating-wrapper">
+            <ul v-show="food.ratings && food.ratings.length">
+              <li v-for="rating in food.ratings" :key="rating.id" class="rating-item border-1px" v-show="needShow(rating.rateType,rating.text)">
+                <div class="user">
+                  <span class="name">{{rating.name}}</span>
+                  <img :src="rating.avatar" alt="" class="avatar" width="12" height="12">
+                </div>
+                <div class="time">
+                  {{rating.rateTime | formatDate}}
+                </div>
+                <p class="text">
+                  <span :class="{'icon-thumb_up': rating.rateType === 0, 'icon-thumb_down': rating.rateType === 1}"></span>
+                  {{rating.text}}
+                </p>
+              </li>
+            </ul>
+            <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
+          </div>
+        </div>
+      </div>
     </div>  
   </transition>
 </template>
 
 <script>
+import split from '../split/split'
+import BScroll from 'better-scroll';
+import cartcontrol from '../cartcontrol/cartcontrol.vue'
+import Vue from 'vue';
+import ratingselect from '../ratingselect/ratingselect.vue'
+import {formatDate} from '../../common/js/date.js'
 export default {
   props: {
     food: {
@@ -14,12 +72,20 @@ export default {
     }
   },
   components: {
-
+    split,
+    cartcontrol,
+    ratingselect,
   },
   data() {
     return {
       showFlag: false,
-      
+
+    }
+  },
+  filters:{
+    formatDate(time){
+      let date = new Date(time);
+      return formatDate(date,'yyyy-MM-dd hh:mm')
     }
   },
   methods: {
@@ -37,6 +103,15 @@ export default {
     },
     hide() {
       this.showFlag = false
+    },
+    addFirst(event) {
+      if(!event._constructed){
+        return;
+      }
+      Vue.set(this.food,'count',1);
+    },
+    needShow() {
+      return true
     }
   }
 }

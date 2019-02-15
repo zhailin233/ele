@@ -121,7 +121,6 @@ export default {
       if (!event._constructed) {
         return
       }
-      console.log(this.$refs)
       this.selectedFood = food;
       this.$refs.food.show()
     },
