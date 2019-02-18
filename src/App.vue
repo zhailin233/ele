@@ -4,7 +4,7 @@
     <div class="tab border-1px">
       <router-link v-for="item in tab" :key="item.id" :to='item.path' class="tab-item">{{item.name}}</router-link>
     </div>
-    <router-view/>
+    <router-view :seller='seller'/>
   </div>
 </template>
 

@@ -35,7 +35,7 @@
                   <span class="old" v-show="food.oldPrice">原件{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food" @cartAdd='addToCart'></cartcontrol>
+                  <cartcontrol :food="food" ></cartcontrol>
                 </div>
               </div>
             </li>
@@ -43,6 +43,7 @@
         </li>
       </ul>
     </div>
+    <shopcart ref='shopcart' :select-foods='selectFoods' :delivery-price='seller.deliveryPrice' :min-price='seller.minPrice'></shopcart>
     <food :food="selectedFood" ref="food"></food>
   </div>
 </template>
@@ -51,12 +52,13 @@
 import cartcontrol from "../cartcontrol/cartcontrol.vue";
 import Bscroll from 'better-scroll';
 import food from "../food/food.vue"
-
+import shopcart from '../shopcart/shopcart.vue'
 const ERR_OK=0;
 export default {
   components: {
     cartcontrol,
     food,
+    shopcart
   },
   data() {
     return {
@@ -114,9 +116,7 @@ export default {
         this.listHeight.push(height)
       }
     },
-    addToCart() {
-      
-    },
+   
     selectFood(food, event) {
       if (!event._constructed) {
         return
@@ -136,6 +136,17 @@ export default {
         }
       }
       return 0
+    },
+    selectFoods() {
+      let foods = [];
+      for (const key in this.goods) {
+        this.goods[key].foods.forEach(food => {
+          if (food.count) {  // Vue.set('count')
+            foods.push(food)
+          }
+        });
+      }
+      return foods
     }
   }
 }
