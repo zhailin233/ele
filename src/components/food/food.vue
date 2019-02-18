@@ -33,7 +33,7 @@
         <split></split>
         <div class="rating">
           <h1 class="title">商品评价</h1>
-          <ratingselect></ratingselect>
+          <ratingselect :desc="desc" :ratings="food.ratings" @choose='change' @toggle='togglecontent'></ratingselect>
           <div class="rating-wrapper">
             <ul v-show="food.ratings && food.ratings.length">
               <li v-for="rating in food.ratings" :key="rating.id" class="rating-item border-1px" v-show="needShow(rating.rateType,rating.text)">
@@ -65,6 +65,8 @@ import cartcontrol from '../cartcontrol/cartcontrol.vue'
 import Vue from 'vue';
 import ratingselect from '../ratingselect/ratingselect.vue'
 import {formatDate} from '../../common/js/date.js'
+
+const ALL = 2;
 export default {
   props: {
     food: {
@@ -79,7 +81,13 @@ export default {
   data() {
     return {
       showFlag: false,
-
+      selectType: ALL,
+      onlyContent: false,
+      desc: {
+        all: '全部',
+        positive: '推荐',
+        negative: '吐槽'
+      }
     }
   },
   filters:{
@@ -91,13 +99,13 @@ export default {
   methods: {
     show() {
       this.showFlag = true;
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         if(!this.scroll){
           this.scroll = new BScroll(this.$refs.food,{
             click:true
           })
         }else{
-          this.scroll.refresh();
+          this.scroll.refresh();  //重新计算better-scroll 确保滚动的效果正常
         }
       });
     },
@@ -110,8 +118,27 @@ export default {
       }
       Vue.set(this.food,'count',1);
     },
-    needShow() {
-      return true
+    needShow(type, text) {  //每一条的评论 显示情况
+      if (this.onlyContent && !text) {  //没内容为true && 选择只看有内容
+        return false
+      }
+      if (this.selectType === ALL) {
+        return true
+      } else {
+        return !(type === this.selectType)  // type 0:推荐  1:吐槽
+      }
+    },
+    change(type) {  // 切换标签页的状态
+      this.selectType = type
+      this.$nextTick(() => {
+        this.scroll.refresh();  
+      });
+    },
+    togglecontent(content) {
+      this.onlyContent = content
+      this.$nextTick(() => {
+        this.scroll.refresh()
+      })
     }
   }
 }
