@@ -1,7 +1,6 @@
 # ele
 
 > A Vue.js project
-> 正在开发中
 
 ## 注意
 
