@@ -4,7 +4,11 @@
     <div class="tab border-1px">
       <router-link v-for="item in tab" :key="item.id" :to='item.path' class="tab-item">{{item.name}}</router-link>
     </div>
-    <router-view :seller='seller'/>
+    <!-- 保存各组件间的状态 -->
+    <keep-alive>   
+      <router-view :seller='seller'/>
+    </keep-alive>
+    
   </div>
 </template>
 

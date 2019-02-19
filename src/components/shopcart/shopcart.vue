@@ -167,7 +167,7 @@ export default {
         let shopCart = document.getElementsByClassName("shopcart-list")[0];
         shopCart.style.top = -(cartList.offsetHeight+48)+'px'
       });
-    },
+    }, 
   }
 }
 </script>

@@ -119,13 +119,13 @@ export default {
       Vue.set(this.food,'count',1);
     },
     needShow(type, text) {  //每一条的评论 显示情况
-      if (this.onlyContent && !text) {  //没内容为true && 选择只看有内容
+      if (this.onlyContent && !text) {  //没内容为true && 选择只看有内容 ->没内容的不显示
         return false
       }
-      if (this.selectType === ALL) {
+      if (this.selectType === ALL) { //全部 都显示 
         return true
       } else {
-        return !(type === this.selectType)  // type 0:推荐  1:吐槽
+        return !(type === this.selectType)  // type 0:推荐  1:吐槽 === 推荐 ：1 吐槽：0
       }
     },
     change(type) {  // 切换标签页的状态
